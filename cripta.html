@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Cripta Frase</title>
+</head>
+<body>
+    <h2>Cripta la tua frase</h2>
+
+    <label>Frase da criptare:</label><br>
+    <input type="text" id="frase" size="40"><br><br>
+
+    <label>Scostamento (numero):</label><br>
+    <input type="number" id="scostamento" value="3"><br><br>
+
+    <button onclick="cripta()">Cripta</button>
+
+    <h3>Frase criptata:</h3>
+    <p id="risultato" style="font-weight: bold;"></p>
+
+    <br>
+    <a id="linkDecripta" href="decripta.html">Vai alla pagina per decrittare &rarr;</a>
+
+    <script>
+        function cripta() {
+            const alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const testo = document.getElementById("frase").value.toUpperCase();
+            // Il modulo (% 26) gestisce anche numeri maggiori di 26 o negativi
+            const shift = ((parseInt(document.getElementById("scostamento").value) || 0) % 26 + 26) % 26;
+            let risultato = "";
+
+            for (let i = 0; i < testo.length; i++) {
+                let char = testo[i];
+                let indice = alfabeto.indexOf(char);
+
+                if (indice !== -1) {
+                    // Sposta la lettera in avanti e ricomincia da capo dopo la Z
+                    let nuovoIndice = (indice + shift) % 26;
+                    risultato += alfabeto[nuovoIndice];
+                } else {
+                    // Mantiene spazi, numeri e punteggiatura invariati
+                    risultato += char;
+                }
+            }
+
+            document.getElementById("risultato").innerText = risultato;
+            
+            // Passa automaticamente la frase criptata alla seconda pagina tramite l'URL
+            document.getElementById("linkDecripta").href = "decripta.html?frase=" + encodeURIComponent(risultato);
+        }
+    </script>
+</body>
+</html>
