@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Decripta Frase</title>
+</head>
+<body>
+    <h2>Decripta la frase</h2>
+
+    <label>Frase criptata:</label><br>
+    <input type="text" id="fraseCriptata" size="40"><br><br>
+
+    <label>Inserisci lo scostamento usato:</label><br>
+    <input type="number" id="scostamento" value="3"><br><br>
+
+    <button onclick="decripta()">Decripta</button>
+
+    <h3>Frase originale:</h3>
+    <p id="risultato" style="font-weight: bold;"></p>
+
+    <br>
+    <a href="cripta.html">&larr; Torna alla pagina per criptare</a>
+
+    <script>
+        // Al caricamento della pagina, recupera la frase dall'URL se presente
+        window.onload = function() {
+            const parametri = new URLSearchParams(window.location.search);
+            const frasePassata = parametri.get("frase");
+            if (frasePassata) {
+                document.getElementById("fraseCriptata").value = frasePassata;
+            }
+        };
+
+        function decripta() {
+            const alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const testo = document.getElementById("fraseCriptata").value.toUpperCase();
+            const shift = ((parseInt(document.getElementById("scostamento").value) || 0) % 26 + 26) % 26;
+            let risultato = "";
+
+            for (let i = 0; i < testo.length; i++) {
+                let char = testo[i];
+                let indice = alfabeto.indexOf(char);
+
+                if (indice !== -1) {
+                    // Sposta la lettera all'indietro (+ 26 evita risultati negativi)
+                    let nuovoIndice = (indice - shift + 26) % 26;
+                    risultato += alfabeto[nuovoIndice];
+                } else {
+                    risultato += char;
+                }
+            }
+
+            document.getElementById("risultato").innerText = risultato;
+        }
+    </script>
+</body>
+</html>
